@@ -1,15 +1,29 @@
-import 'package:donteur/pages/choice.dart';
-import 'package:donteur/pages/donor_signup.dart';
 import 'package:flutter/material.dart';
-import 'package:donteur/pages/ngo_signup.dart';
+// ignore: unused_import
+import 'package:donteur/modules/bottom_navbar.dart';
+import 'package:donteur/pages/get_started.dart';
+import 'package:provider/provider.dart';
+import 'package:donteur/providers/UserdataProvider.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => UserData())],
+      child: const MyApp()));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Donor',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const Choice(),
-        '/donor_signup': (context) => DonorSignUp(),
-        '/ngo_signup': (context) => NgoSignUp(),
-      }));
+      theme: ThemeData(
+        primaryColor: Colors.teal,
+      ),
+      home: const GetStarted(),
+    );
+  }
 }

@@ -1,19 +1,44 @@
+import 'dart:convert';
+import 'package:donteur/modules/bottom_navbar.dart';
+import 'package:donteur/pages/donors/donor_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-class NgoSignUp extends StatefulWidget {
-  const NgoSignUp({Key? key}) : super(key: key);
+class DonorSignUp extends StatefulWidget {
+  const DonorSignUp({Key? key}) : super(key: key);
 
   @override
-  State<NgoSignUp> createState() => _NgoSignupState();
+  DonorSignUpState createState() {
+    return DonorSignUpState();
+  }
 }
 
-class _NgoSignupState extends State<NgoSignUp> {
+// Create a corresponding State class, which holds data related to the form.
+class DonorSignUpState extends State<DonorSignUp> {
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
+  String? Username;
+  String? Email;
+  String? Password;
+  Map? json_response;
+
+//This function is used to make the requesst for submitting the user inforamtion
+  Future<void> makePostRequest() async {
+    final url = Uri.parse('http://localhost:3000/register_user');
+    final headers = {"Content-type": "application/json"};
+    final json =
+        '{"user_name": "$Username", "email": "$Email", "password": "$Password","type": "Donor"}';
+    final response = await post(url, headers: headers, body: json);
+    print(response.body);
+    json_response = jsonDecode(response.body);
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(226, 125, 96, 1.0),
+      backgroundColor: const Color.fromRGBO(87, 169, 154, 1.0),
       body: Column(
         children: [
           //This is the back arrow container
@@ -70,7 +95,7 @@ class _NgoSignupState extends State<NgoSignUp> {
                               'Lets Get Started',
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Color.fromRGBO(226, 125, 96, 1.0),
+                                color: const Color.fromRGBO(87, 169, 154, 1.0),
                               ),
                             ),
                           )
@@ -85,19 +110,24 @@ class _NgoSignupState extends State<NgoSignUp> {
                             TextFormField(
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.person),
-                                hintText: 'Enter Organization Name',
+                                hintText: 'Enter your Username',
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Name cannot be empty';
+                                  return 'Username cannot be empty';
                                 }
                                 return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  Username = value;
+                                });
                               },
                             ),
                             TextFormField(
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.mail),
-                                hintText: 'Enter Organizational Email',
+                                hintText: 'Enter your email',
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -105,8 +135,14 @@ class _NgoSignupState extends State<NgoSignUp> {
                                 }
                                 return null;
                               },
+                              onChanged: (value) {
+                                setState(() {
+                                  Email = value;
+                                });
+                              },
                             ),
                             TextFormField(
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.lock),
                                 hintText: 'Enter your Password',
@@ -120,8 +156,14 @@ class _NgoSignupState extends State<NgoSignUp> {
                                 }
                                 return null;
                               },
+                              onChanged: (value) {
+                                setState(() {
+                                  Password = value;
+                                });
+                              },
                             ),
                             TextFormField(
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.lock),
                                 hintText: 'Confirm your Password',
@@ -132,6 +174,9 @@ class _NgoSignupState extends State<NgoSignUp> {
                                 }
                                 if (value.length < 8) {
                                   return 'Password must be atleast of 8 Charaters!!';
+                                }
+                                if (value != Password) {
+                                  return 'Password does not match!!';
                                 }
                                 return null;
                               },
@@ -146,17 +191,19 @@ class _NgoSignupState extends State<NgoSignUp> {
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                const Color.fromRGBO(
-                                                    226, 125, 96, 1.0)),
+                                          Color.fromRGBO(87, 169, 154, 1.0),
+                                        ),
                                       ),
                                       onPressed: () {
                                         // It returns true if the form is valid, otherwise returns false
                                         if (_formKey.currentState!.validate()) {
                                           // If the form is valid, display a Snackbar.
-                                          Scaffold.of(context).showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Data is in processing.')));
+                                          makePostRequest();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BottomNav()));
                                         }
                                       },
                                     )),

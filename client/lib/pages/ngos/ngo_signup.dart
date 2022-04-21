@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 
-class DonorSignUp extends StatefulWidget {
-  const DonorSignUp({Key? key}) : super(key: key);
+class NgoSignUp extends StatefulWidget {
+  const NgoSignUp({Key? key}) : super(key: key);
 
   @override
-  DonorSignUpState createState() {
-    return DonorSignUpState();
-  }
+  State<NgoSignUp> createState() => _NgoSignupState();
 }
 
-// Create a corresponding State class, which holds data related to the form.
-class DonorSignUpState extends State<DonorSignUp> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
+class _NgoSignupState extends State<NgoSignUp> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(226, 125, 96, 1.0),
+      backgroundColor: const Color.fromRGBO(87, 169, 154, 1.0),
       body: Column(
         children: [
           //This is the back arrow container
@@ -76,7 +70,7 @@ class DonorSignUpState extends State<DonorSignUp> {
                               'Lets Get Started',
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Color.fromRGBO(226, 125, 96, 1.0),
+                                color: Color.fromRGBO(87, 169, 154, 1.0),
                               ),
                             ),
                           )
@@ -91,11 +85,11 @@ class DonorSignUpState extends State<DonorSignUp> {
                             TextFormField(
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.person),
-                                hintText: 'Enter your Username',
+                                hintText: 'Enter Organization Name',
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Username cannot be empty';
+                                  return 'Name cannot be empty';
                                 }
                                 return null;
                               },
@@ -103,7 +97,7 @@ class DonorSignUpState extends State<DonorSignUp> {
                             TextFormField(
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.mail),
-                                hintText: 'Enter your email',
+                                hintText: 'Enter Organizational Email',
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -113,6 +107,7 @@ class DonorSignUpState extends State<DonorSignUp> {
                               },
                             ),
                             TextFormField(
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.lock),
                                 hintText: 'Enter your Password',
@@ -128,6 +123,7 @@ class DonorSignUpState extends State<DonorSignUp> {
                               },
                             ),
                             TextFormField(
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.lock),
                                 hintText: 'Confirm your Password',
@@ -152,8 +148,8 @@ class DonorSignUpState extends State<DonorSignUp> {
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                const Color.fromRGBO(
-                                                    226, 125, 96, 1.0)),
+                                          Color.fromRGBO(87, 169, 154, 1.0),
+                                        ),
                                       ),
                                       onPressed: () {
                                         // It returns true if the form is valid, otherwise returns false
